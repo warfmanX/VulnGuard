@@ -108,3 +108,10 @@ Notes:
 - The Compose file supplies `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD` so the containerized app connects to Postgres.
 - For quick local development without Postgres, the app falls back to an in-memory H2 database when `SPRING_DATASOURCE_URL` is not provided.
 
+Container details:
+- The `app` service has a healthcheck that verifies `/actuator/health` to ensure the application is responsive.
+- The `app` service uses a restart policy `unless-stopped` so it recovers from transient failures during local development.
+
+Security note:
+- The image currently runs the JVM process as the container user defined by the base image. For production, consider running as a non-root user and using a smaller base image (e.g., a distroless runtime) for better security.
+
