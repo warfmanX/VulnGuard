@@ -1,7 +1,6 @@
 package com.vulnguard.domain;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +27,8 @@ public class SystemAsset {
 
     @OneToMany(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ScanReport> scanReports = new HashSet<>();
+
+    // --- Геттеры и Сеттеры ---
 
     public Long getId() {
         return id;
@@ -77,6 +78,28 @@ public class SystemAsset {
         this.scanReports = scanReports;
     }
 
+    // --- Computed security status, derived from latest report ---
+    // @Transient говорит Hibernate не искать эту колонку в базе данных
+    @Transient
+    public String getCurrentSecurityStatus() {
+        // determine latest report and inspect vulnerabilities
+        return scanReports.stream()
+                .max(java.util.Comparator.comparing(ScanReport::getTimestamp, java.util.Comparator.nullsLast(java.time.Instant::compareTo)))
+                .map(report -> {
+                    // explicit vulnerable status takes precedence
+                    if (report.getStatus() == ScanReport.Status.VULNERABLE) {
+                        return "AT_RISK";
+                    }
+                    if (report.getStatus() != ScanReport.Status.COMPLETED) {
+                        return "SCAN_" + report.getStatus().name();
+                    }
+                    // if there were any vulnerabilities at all, consider at risk
+                    boolean hasAny = !report.getVulnerabilities().isEmpty();
+                    return hasAny ? "AT_RISK" : "HEALTHY";
+                })
+                .orElse("NOT_SCANNED");
+    }
+
     public enum ImportanceLevel {
         LOW,
         MEDIUM,
@@ -84,4 +107,3 @@ public class SystemAsset {
         CRITICAL
     }
 }
-

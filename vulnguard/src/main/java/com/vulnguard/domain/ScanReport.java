@@ -76,6 +76,8 @@ public class ScanReport {
     public enum Status {
         PENDING,
         RUNNING,
+        // report finished but one or more vulnerabilities were found
+        VULNERABLE,
         COMPLETED,
         FAILED
     }

@@ -80,13 +80,10 @@
                               th:text="${asset.importanceLevel}">HIGH</span>
                     </td>
                     <td>
-                        <span th:switch="${asset.currentSecurityStatus}">
-                            <span th:case="'HEALTHY'" class="badge bg-success">Healthy</span>
-                            <span th:case="'AT_RISK'" class="badge bg-danger">At Risk</span>
-                            <span th:case="'NOT_SCANNED'" class="badge bg-secondary">Not Scanned</span>
-                            <span th:case="*"
-                                  class="badge bg-info"
-                                  th:text="${asset.currentSecurityStatus}">UNKNOWN</span>
+                        <span class="badge"
+                              th:text="${asset.currentSecurityStatus}"
+                              th:classappend="${asset.currentSecurityStatus == 'HEALTHY' ? 'bg-success' : 'bg-danger'}">
+                            Status
                         </span>
                     </td>
                     <td>
