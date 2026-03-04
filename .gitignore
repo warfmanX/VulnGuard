@@ -1,0 +1,25 @@
+# IDEs
+/.idea/
+/.vscode/
+.metals/
+.bloop/
+
+# macOS
+.DS_Store
+
+# Java / Maven
+**/target/
+*.class
+*.jar
+
+# PostgreSQL data (compose)
+vulnguard/vulnguard-db-data/
+
+# .NET build outputs
+ConsoleApp1/bin/
+ConsoleApp1/obj/
+**/*.dll
+**/*.pdb
+
+# Misc
+/.vscode/settings.json
