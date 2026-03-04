@@ -1,6 +1,6 @@
 # VulnGuard
 
-VulnGuard is a Spring Boot 3.x (Java 17) application for tracking and analyzing security vulnerabilities across system assets.
+VulnGuard is a Spring Boot 3.x (Java 21 LTS) application for tracking and analyzing security vulnerabilities across system assets.
 
 ## Tech Stack
 
@@ -76,4 +76,35 @@ Relationships:
 
 - 404 responses use a structured JSON body when entities are not found.
 - Validation errors on DTOs return 400 with field-level messages.
+
+## Recent Improvements
+
+- Migrated project to **Java 21** (LTS) – compile and run targets updated in `pom.xml`.
+- Introduced mapper classes to separate DTO conversion logic.
+- Added validation checks in services to surface missing foreign keys early.
+- Computed `currentSecurityStatus` in domain model and reused in DTOs.
+- Added global converters for enum binding via `WebConfig`.
+- Added unit tests for mappers and service behavior.
+
+
+## Docker (Run with Docker Compose)
+
+The project includes a `docker-compose.yml` that starts a PostgreSQL database, the application, Prometheus and Grafana.
+
+Quick start (builds the app image and starts services):
+
+```bash
+cd "/Users/rodion/vs code/vulnguard"
+docker compose up --build -d
+```
+
+Check logs for the application:
+
+```bash
+docker compose logs --tail=200 app
+```
+
+Notes:
+- The Compose file supplies `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD` so the containerized app connects to Postgres.
+- For quick local development without Postgres, the app falls back to an in-memory H2 database when `SPRING_DATASOURCE_URL` is not provided.
 
