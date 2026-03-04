@@ -14,10 +14,19 @@ RUN mvn -B -DskipTests package
 # ==== Stage 2: Run ====
 FROM eclipse-temurin:21-jre
 
+# create non-root user/group for security
+RUN addgroup -S spring && adduser -S spring -G spring
+
 WORKDIR /app
 
 # Copy the fat jar from the builder stage
 COPY --from=builder /app/target/vulnguard-0.0.1-SNAPSHOT.jar app.jar
+
+# ensure jar is owned by non-root user
+RUN chown spring:spring /app/app.jar
+
+# switch to the non-root user for runtime
+USER spring:spring
 
 # Expose application port
 EXPOSE 8080

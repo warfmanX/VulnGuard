@@ -10,6 +10,8 @@ VulnGuard is a Spring Boot 3.x (Java 21 LTS) application for tracking and analy
 - PostgreSQL
 - Thymeleaf
 - Jsoup (vulnerability feed scraping)
+- Spring Security (Basic auth)
+
 
 ## Domain Model
 
@@ -88,6 +90,9 @@ Relationships:
 
 
 ## Docker (Run with Docker Compose)
+
+Authentication: the application is protected with HTTP Basic; default user `admin` / `admin`.
+
 
 The project includes a `docker-compose.yml` that starts a PostgreSQL database, the application, Prometheus and Grafana.
 
